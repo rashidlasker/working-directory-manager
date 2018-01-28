@@ -1,0 +1,22 @@
+{
+  "name": "working-directory-manager",
+  "version": "0.1.0",
+  "description": "Working directory manager for switching between multiple projects",
+  "main": "index.js",
+  "bin": {
+    "wdls": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rashidlasker/working-directory-manager.git"
+  },
+  "author": "Rashid Lasker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rashidlasker/working-directory-manager/issues"
+  },
+  "homepage": "https://github.com/rashidlasker/working-directory-manager#readme"
+}
