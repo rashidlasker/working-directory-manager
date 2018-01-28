@@ -80,17 +80,32 @@ program
                 process.exit(1);
             }
         });
-        if(name){
-            console.log("listing " + name);
-        }else{
-            console.log("listing all");
-        }
     });
 
 program
     .command('remove <name>').alias('r')
     .action(function (name) {
-        console.log("removing " + name);
+        fs.readFile(localDataStore, 'utf8', function(err, contents) {
+            try {
+                result = JSON.parse(JSONstring);
+                try {
+                    delete result[name];
+                    console.log("removing " + name);
+                    var returnJSON = JSON.stringify(result);
+                    fs.writeFile(localDataStore, json, 'utf8'); //callback?
+                    process.exit(0);
+                }
+                catch(e) {
+                    console.error("Shortcut not found.")
+                    process.exit(1);
+                }
+                process.exit(0);
+            }
+            catch(e) {
+                console.error("No shortcuts saved.")
+                process.exit(1);
+            }
+        });
     });
 
 program.parse(process.argv);
