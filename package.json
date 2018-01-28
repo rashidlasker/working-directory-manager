@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/rashidlasker/working-directory-manager/issues"
   },
-  "homepage": "https://github.com/rashidlasker/working-directory-manager#readme"
+  "homepage": "https://github.com/rashidlasker/working-directory-manager#readme",
+  "dependencies": {
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
+    "commander": "^2.13.0",
+    "get-installed-path": "^4.0.8",
+    "shelljs": "^0.8.1"
+  }
 }
