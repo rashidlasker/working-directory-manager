@@ -1,8 +1,8 @@
 #!/usr/bin/env node --harmony
 
-var shell = require("shelljs");
 var program = require('commander');
 var fs = require('fs');
+const { exec } = require('child_process');
 const { getInstalledPathSync } = require('get-installed-path')
 
 var localDataStore = getInstalledPathSync('working-directory-manager') + "\\data.json";
@@ -14,18 +14,11 @@ program
         fs.readFile(localDataStore, 'utf8', function(err, contents) {
             //console.log(contents);
             try {
-                result = JSON.parse(JSONstring);
-                // if(result[shortcut]){
-                //     console.log("Going to " + shortcut);
-
-                // }else{
-                //     console.error("Shortcut not found.")
-                //     process.exit(1);
-                // }
+                result = JSON.parse(contents);
                 try {
                     let shortcutPath = result[shortcut];
                     console.log("Going to " + shortcut);
-                    shell.cd(shortcutPath);
+                    exec("start cmd.exe /K cd " + shortcutPath);
                 }
                 catch(e) {
                     console.error("Shortcut not found.")
@@ -42,11 +35,24 @@ program
 program
     .command('save <name> [loc]').alias('s')
     .action(function (name, loc) {
+        var shortcutPath;
         if(loc){
-            console.log("Saving " + loc + " as shortcut: " + name);
+            shortcutPath = loc;
         }else{
-            console.log("Saving " + process.cwd() + " as shortcut: " + name);
+            shortcutPath = process.cwd();
         }
+        console.log("Saving " + shortcutPath + " as " + name);
+        fs.readFile(localDataStore, 'utf8', function(err, contents) {
+            try {
+                result = JSON.parse(contents);
+                result[name] = shortcutPath;
+                fs.writeFile(localDataStore, JSON.stringify(result), 'utf8');
+            }
+            catch(e) {
+                fs.writeFile(localDataStore, JSON.stringify({[name]: shortcutPath}), 'utf8');
+            }
+        });
+        
     });
 
 program
@@ -54,30 +60,27 @@ program
     .action(function (name) {
         fs.readFile(localDataStore, 'utf8', function(err, contents) {
             try {
-                result = JSON.parse(JSONstring);
+                result = JSON.parse(contents);
                 if(name){
-                    try {
+                    if(result[name]){
                         let shortcutPath = result[name];
-                        console.log("listing " + name);
-                        console.log(name + " - " + shortcutPath);
-                    }
-                    catch(e) {
+                        console.log(name + "\t- " + shortcutPath);
+                    } else {
                         console.error("Shortcut not found.")
-                        process.exit(1);
                     }
                 } else {
-                    console.log("listing all");
+                    console.log();
+                    console.log("Saved Workspaces");
+                    console.log();
                     for (var key in result) {
                         if (result.hasOwnProperty(key)) {
-                            console.log(key + " - " + result[key]);
+                            console.log(key + "\t- " + result[key]);
                         }
                     }
                 }
-                process.exit(0);
             }
             catch(e) {
-                console.error("No shortcuts saved.")
-                process.exit(1);
+                console.error("No shortcuts saved.");
             }
         });
     });
@@ -87,25 +90,26 @@ program
     .action(function (name) {
         fs.readFile(localDataStore, 'utf8', function(err, contents) {
             try {
-                result = JSON.parse(JSONstring);
-                try {
+                result = JSON.parse(contents);
+                if(result[name]) {
                     delete result[name];
-                    console.log("removing " + name);
                     var returnJSON = JSON.stringify(result);
-                    fs.writeFile(localDataStore, json, 'utf8'); //callback?
-                    process.exit(0);
+                    fs.writeFile(localDataStore, returnJSON, 'utf8');
+                    console.log("Removed " + name + " from saved workspaces.");
+                } else {
+                    console.error("Shortcut not found.");
                 }
-                catch(e) {
-                    console.error("Shortcut not found.")
-                    process.exit(1);
-                }
-                process.exit(0);
             }
             catch(e) {
-                console.error("No shortcuts saved.")
-                process.exit(1);
+                console.error("No shortcuts saved.");
             }
         });
+    });
+
+program
+    .command('root')
+    .action(function (name, loc) {
+        console.log(localDataStore);        
     });
 
 program.parse(process.argv);
