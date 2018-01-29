@@ -1,10 +1,10 @@
 {
   "name": "working-directory-manager",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "Working directory manager for switching between multiple projects",
   "main": "index.js",
   "bin": {
-    "wdls": "./index.js"
+    "wdm": "./index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,7 +21,6 @@
   "homepage": "https://github.com/rashidlasker/working-directory-manager#readme",
   "dependencies": {
     "commander": "^2.13.0",
-    "get-installed-path": "^4.0.8",
-    "shelljs": "^0.8.1"
+    "get-installed-path": "^4.0.8"
   }
 }
