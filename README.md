@@ -19,7 +19,7 @@ Searches through saved directories and opens the workspace in a new command line
 
 `wdm save|s <shortcut> [loc]`
 
-Saves the current directory under the alias \<shortcut>. If [loc] is given, it is saved instead.
+Saves the current directory under the alias \<shortcut>. If [loc] is given, it is saved instead. Sudo access may be needed to use this command.
 
 `wdm list|l [shortcut]`
 
@@ -43,6 +43,8 @@ Print current version
 * Test/optimize on mac/linux
 * Close parent process after opening new window
 * Give suggested shortcuts for misspellings
+* Fix bug for spaces in file paths
+* Add better error messages when admin access is needed
 
 ## Contributing
 
