@@ -25,26 +25,26 @@ program
                     let shortcutPath = result[shortcut];
                     console.log("Going to " + shortcut);
                     if(process.platform === 'win32'){
-                        exec("start cmd.exe /K cd " + shortcutPath, (error, stdout, stderr) => {
+                        exec("start cmd.exe /K cd \"" + shortcutPath + "\"", (error, stdout, stderr) => {
                           if (error) {
                             console.error(`exec error: ${error}`);
                             return;
                           }
                         });
                     } else if(process.platform === 'darwin'){
-                        exec("open -a Terminal " + shortcutPath, (error, stdout, stderr) => {
+                        exec("open -a Terminal \"" + shortcutPath + "\"", (error, stdout, stderr) => {
                           if (error) {
                             console.error(`exec error: ${error}`);
                             return;
                           }
-                        });  
+                        });
                     } else if(process.platform === 'linux'){
                         exec("xterm -e \"cd " + shortcutPath + "\"", (error, stdout, stderr) => {
                           if (error) {
                             console.error(`exec error: ${error}`);
                             return;
                           }
-                        });  
+                        });
                     } else {
                         console.log(`OS not supported. Look for future updates`);
                     }

@@ -40,7 +40,9 @@ Print current version
 * Input sanitation and validation
 * Style working directory list
 * Update help function
-* Test/optimize on windows/linux
+* Test/optimize on mac/linux
+* Close parent process after opening new window
+* Give suggested shortcuts for misspellings
 
 ## Contributing
 
