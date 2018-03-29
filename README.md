@@ -41,7 +41,6 @@ Print current version
 * Update help function
 * Test/optimize on mac/linux
 * Close parent process after opening new window
-* Give suggested shortcuts for misspellings
 * Add better error messages when admin access is needed
 
 ## Contributing
