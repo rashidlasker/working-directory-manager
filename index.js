@@ -10,7 +10,7 @@ var localDataStore = getInstalledPathSync('working-directory-manager') + "\\data
 
 //Base program information
 program
-    .version('0.5.0', '-v, --version')
+    .version('0.6.0', '-v, --version')
     .usage('[command] <shortcut>')
 
 //Switch directory function
@@ -50,12 +50,13 @@ program
                     }
                     
                 } else {
-                    console.error("Shortcut not found.")
+                    console.error("Shortcut not found.");
+                    //print most similar
                     process.exit(1);
                 }
             }
             catch(e) {
-                console.error("No shortcuts saved.")
+                console.error("No shortcuts saved.");
                 process.exit(1);
             }
         });
@@ -66,6 +67,18 @@ program
     .command('save <shortcut> [loc]').alias('s')
     .description('\nSaves the current directory under the alias <shortcut>. If [loc] is given, it is saved instead.\n')
     .action(function (shortcut, loc) {
+        //check if shortcut works
+        forbiddenShortcuts = ["r", "remove", "s", "save", "l", "list"];
+        if(forbiddenShortcuts.indexOf(shortcut) > -1){
+            console.error(shortcut + " is already a pre-defined command. Try again with another word!");
+            process.exit(1);
+        }
+        var letterNumber = /^[0-9a-zA-Z]+$/;
+        if(!shortcut.match(letterNumber)) {
+            console.error("Shortcut can only have letters and numbers. Try again!");
+            process.exit(1);
+        }
+        //save shortcut
         var shortcutPath;
         if(loc){
             shortcutPath = loc;
@@ -148,3 +161,10 @@ program.parse(process.argv);
 
 //Print help if user types no arguments
 if (!program.args.length) program.help();
+
+
+/*===================================================================================================================================================*/
+/*                                                                                                                                                   */
+/*                                                                    Helper Functions                                                               */
+/*                                                                                                                                                   */
+/*===================================================================================================================================================*/

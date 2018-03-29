@@ -37,13 +37,11 @@ Print current version
 ## Todo
 
 * Change command prompt directory without opening a new window/have an option to do so
-* Input sanitation and validation
 * Style working directory list
 * Update help function
 * Test/optimize on mac/linux
 * Close parent process after opening new window
 * Give suggested shortcuts for misspellings
-* Fix bug for spaces in file paths
 * Add better error messages when admin access is needed
 
 ## Contributing
