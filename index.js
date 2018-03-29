@@ -52,7 +52,19 @@ program
                 } else {
                     console.error("Shortcut not found.");
                     //print most similar
-                    process.exit(1);
+                    try{
+                        fs.readFile(localDataStore, 'utf8', function(err, contents) {
+                            result = JSON.parse(contents);
+                            for (var key in result) {
+                                if (stringSimilarity(shortcut, key) > 0.6) {
+                                    console.log("You may be looking for this shortcut: " + key);
+                                }
+                            }
+                        });
+                    }
+                    catch(e){
+                        process.exit(1);
+                    }                    
                 }
             }
             catch(e) {
@@ -168,3 +180,37 @@ if (!program.args.length) program.help();
 /*                                                                    Helper Functions                                                               */
 /*                                                                                                                                                   */
 /*===================================================================================================================================================*/
+
+function stringSimilarity(sa1, sa2){
+    var s1 = sa1.replace(/\s/g, "").toLowerCase();
+    var s2 = sa2.replace(/\s/g, "").toLowerCase();
+    
+    function intersect(arr1, arr2) {
+        var r = [], o = {}, l = arr2.length, i, v;
+        for (i = 0; i < l; i++) {
+            o[arr2[i]] = true;
+        }
+        l = arr1.length;
+        for (i = 0; i < l; i++) {
+            v = arr1[i];
+            if (v in o) {
+                r.push(v);
+            }
+        }
+        return r;
+    }
+    
+    var pairs = function(s){
+        // Get an array of all pairs of adjacent letters in a string
+        var pairs = [];
+        for(var i = 0; i < s.length - 1; i++){
+            pairs[i] = s.slice(i, i+2);
+        }
+        return pairs;
+    }    
+    
+    var similarity_num = 2 * intersect(pairs(s1), pairs(s2)).length;
+    var similarity_den = pairs(s1).length + pairs(s2).length;
+    var similarity = similarity_num / similarity_den;
+    return similarity;
+};
