@@ -10,7 +10,7 @@ var localDataStore = getInstalledPathSync('working-directory-manager') + "\\data
 
 //Base program information
 program
-    .version('0.6.0', '-v, --version')
+    .version('0.7.0', '-v, --version')
     .usage('[command] <shortcut>')
 
 //Switch directory function
@@ -31,6 +31,7 @@ program
                             return;
                           }
                         });
+                        
                     } else if(process.platform === 'darwin'){
                         exec("open -a Terminal \"" + shortcutPath + "\"", (error, stdout, stderr) => {
                           if (error) {
