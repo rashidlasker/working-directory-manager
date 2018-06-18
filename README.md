@@ -41,7 +41,8 @@ Print current version
 * Update help function
 * Test/optimize on mac/linux
 * Close parent process after opening new window
-* Add better error messages when admin access is needed
+* Add backup/loading feature
+* Add colors
 
 ## Contributing
 

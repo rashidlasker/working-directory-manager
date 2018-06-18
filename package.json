@@ -1,6 +1,6 @@
 {
   "name": "working-directory-manager",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Working directory manager for switching between multiple projects",
   "main": "index.js",
   "bin": {
@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/rashidlasker/working-directory-manager#readme",
   "dependencies": {
-    "commander": "^2.13.0",
-    "get-installed-path": "^4.0.8"
+    "commander": "^2.13.0"
   }
 }
