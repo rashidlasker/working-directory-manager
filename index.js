@@ -7,7 +7,7 @@ var readline = require('readline');
 var rl = readline.createInterface(process.stdin, process.stdout);
 
 //Location of saved directory list
-const localDataStore = require('os').homedir() + "\\working-directory-manager.json";
+const localDataStore = require('os').homedir() + "/working-directory-manager.json";
 
 //Other Info
 const forbiddenShortcuts = ["r", "remove", "s", "save", "l", "list", "c", "clear", "cli"];
