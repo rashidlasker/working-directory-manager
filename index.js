@@ -15,7 +15,7 @@ const acceptedTerminals = ["cmd", "powershell", "terminal", "tilix"];
 
 //Base program information
 program
-    .version('0.8.0', '-v, --version')
+    .version('0.9.0', '-v, --version')
     .usage('[command] <shortcut>')
 
 //Switch directory function

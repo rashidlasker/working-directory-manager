@@ -29,6 +29,10 @@ List all saved directories. If [shortcut] is given, the program will search for 
 
 Remove the selected directory from the list of saved aliases, if it exists.
 
+`wdm cli [terminal]`
+
+View available terminals. If [terminal] is given, it will be saved as the terminal to use when opening new windows.
+
 `wdm --version|-v`
 
 Print current version
@@ -38,9 +42,8 @@ Print current version
 
 * Change command prompt directory without opening a new window/have an option to do so
 * Style working directory list
-* Update help function
 * Test/optimize on mac/linux
-* Close parent process after opening new window
+* Add more terminal compatibility
 * Add backup/loading feature
 * Add colors
 
