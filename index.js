@@ -10,7 +10,8 @@ var rl = readline.createInterface(process.stdin, process.stdout);
 const localDataStore = require('os').homedir() + "\\working-directory-manager.json";
 
 //Other Info
-const forbiddenShortcuts = ["r", "remove", "s", "save", "l", "list", "c", "clear"];
+const forbiddenShortcuts = ["r", "remove", "s", "save", "l", "list", "c", "clear", "cli"];
+const acceptedTerminals = ["cmd", "powershell", "terminal", "tilix"];
 
 //Base program information
 program
@@ -24,40 +25,34 @@ program
     .action(function (shortcut) {
         checkDataStore();
         var result = JSON.parse(fs.readFileSync(localDataStore));
-        if(result[shortcut]) {
-            let shortcutPath = result[shortcut];
+        var terminal = result['command-line'];
+        if(result['shortcuts'][shortcut]) {
+            let shortcutPath = result['shortcuts'][shortcut];
             console.log("Going to " + shortcut);
-            if(process.platform === 'win32'){
-                exec("start cmd.exe /K cd \"" + shortcutPath + "\"", (error, stdout, stderr) => {
-                  if (error) {
-                    console.error(`exec error: ${error}`);
-                    return;
-                  }
-                });
-            } else if(process.platform === 'darwin'){
-                exec("open -a Terminal \"" + shortcutPath + "\"", (error, stdout, stderr) => {
-                  if (error) {
-                    console.error(`exec error: ${error}`);
-                    return;
-                  }
-                });
-            } else if(process.platform === 'linux'){
-                exec("xterm -e \"cd " + shortcutPath + "\"", (error, stdout, stderr) => {
-                  if (error) {
-                    console.error(`exec error: ${error}`);
-                    return;
-                  }
-                });
+            let switchCommand = "";
+            if(terminal === "cmd"){
+                switchCommand = "start cmd.exe /K cd \"" + shortcutPath + "\"";
+            } else if(terminal === "powershell"){
+                switchCommand = "start powershell -NoExit -Command \"Set-Location " + shortcutPath + "\"";
+            } else if(terminal === "terminal"){
+                switchCommand = "open -a Terminal \"" + shortcutPath + "\"";
+            } else if(terminal === "tilix"){
+                switchCommand = "tilix " + shortcutPath;
             } else {
-                console.log(`OS not supported. Look for future updates`);
+                console.log(`Command line not supported. Try another one.`);
                 process.exit(1);
             }
-            
+            exec(switchCommand, (error, stdout, stderr) => {
+              if (error) {
+                console.error(`exec error: ${error}`);
+                return;
+              }
+            });
         } else {
             console.error("Shortcut not found.");
             //print most similar
             var result = JSON.parse(fs.readFileSync(localDataStore));
-            for (var key in result) {
+            for (var key in result['shortcuts']) {
                 if (stringSimilarity(shortcut, key) > 0.6) {
                     console.log("You may be looking for this shortcut: " + key);
                 }
@@ -91,7 +86,7 @@ program
         }
         console.log("Saving " + shortcutPath + " as " + shortcut);
         var result = JSON.parse(fs.readFileSync(localDataStore));
-        result[shortcut] = shortcutPath;
+        result['shortcuts'][shortcut] = shortcutPath;
         fs.writeFileSync(localDataStore, JSON.stringify(result));
         process.exit(0);
     });
@@ -104,8 +99,8 @@ program
         checkDataStore();
         var result = JSON.parse(fs.readFileSync(localDataStore));
         if(shortcut){
-            if(result[shortcut]){
-                let shortcutPath = result[shortcut];
+            if(result['shortcuts'][shortcut]){
+                let shortcutPath = result['shortcuts'][shortcut];
                 console.log(shortcut + "\t- " + shortcutPath);
                 process.exit(0);
             } else {
@@ -116,9 +111,9 @@ program
             console.log();
             console.log("Saved Workspaces");
             console.log();
-            for (var key in result) {
-                if (result.hasOwnProperty(key)) {
-                    console.log(key + "\t- " + result[key]);
+            for (var key in result['shortcuts']) {
+                if (result['shortcuts'].hasOwnProperty(key)) {
+                    console.log(key + "\t- " + result['shortcuts'][key]);
                 }
             }
             process.exit(0);
@@ -132,8 +127,8 @@ program
     .action(function (shortcut) {
         checkDataStore();
         var result = JSON.parse(fs.readFileSync(localDataStore));
-        if(result[shortcut]) {
-            delete result[shortcut];
+        if(result['shortcuts'][shortcut]) {
+            delete result['shortcuts'][shortcut];
             var returnJSON = JSON.stringify(result);
             fs.writeFileSync(localDataStore, returnJSON);
             console.log("Removed " + shortcut + " from saved workspaces.");
@@ -146,14 +141,15 @@ program
 
 //Clear all saved shortcuts
 program
-    .command('clear ').alias('c')
-    .description('\nClear all saved shortcuts\n')
-    .action(function (shortcut) {
+    .command('clear').alias('c')
+    .description('\nClear all saved shortcuts.\n')
+    .action(function () {
         rl.question("Clear all? [yes]/no: ", function(answer) {
             if(answer === "yes") {
                 checkDataStore();
                 var result = JSON.parse(fs.readFileSync(localDataStore));
-                fs.writeFileSync(localDataStore, JSON.stringify({}));
+                result["shortcuts"] = {};
+                fs.writeFileSync(localDataStore, JSON.stringify(result));
                 console.log("All shortcuts cleared");
                 process.exit(0);
             } else {
@@ -161,6 +157,33 @@ program
                 process.exit(0);
             }
         });
+    });
+
+//Change command line 
+program
+    .command('cli [terminal]')
+    .description('\nChange command line to be used.\n')
+    .action(function (terminal) {
+        checkDataStore();
+        var result = JSON.parse(fs.readFileSync(localDataStore));
+        if(terminal){
+            if(acceptedTerminals.indexOf(terminal) == -1){
+                console.error(terminal + " is not a supported terminal.");
+                process.exit(1);
+            }
+            result["command-line"] = terminal;
+            fs.writeFileSync(localDataStore, JSON.stringify(result));
+            console.log("Selected terminal updated");
+            process.exit(0);
+        } else {
+            console.log();
+            console.log("Accepted Terminals");
+            console.log();
+            for (var i = 0; i < acceptedTerminals.length; i++) {
+                console.log(acceptedTerminals[i]);
+            }
+            process.exit(0);
+        }
     });
 
 program.parse(process.argv);
@@ -211,6 +234,12 @@ function stringSimilarity(sa1, sa2) {
 
 function checkDataStore() {
     if(!fs.existsSync(localDataStore)) {
-        fs.writeFileSync(localDataStore, JSON.stringify({}));
+        var commandline = "cmd";
+        if(process.platform === 'linux'){
+            commandline = "tilix";
+        } else if(process.platform === 'darwin'){
+            commandline = "terminal";
+        }
+        fs.writeFileSync(localDataStore, JSON.stringify({"command-line": commandline, "shortcuts":{}}));
     }
 }
