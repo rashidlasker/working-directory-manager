@@ -15,7 +15,7 @@ const acceptedTerminals = ["cmd", "powershell", "terminal", "tilix"];
 
 //Base program information
 program
-    .version('0.9.0', '-v, --version')
+    .version('1.0.0', '-v, --version')
     .usage('[command] <shortcut>')
 
 //Switch directory function
@@ -37,7 +37,7 @@ program
             } else if(terminal === "terminal"){
                 switchCommand = "open -a Terminal \"" + shortcutPath + "\"";
             } else if(terminal === "tilix"){
-                switchCommand = "tilix " + shortcutPath;
+                switchCommand = "tilix -w " + shortcutPath;
             } else {
                 console.log(`Command line not supported. Try another one.`);
                 process.exit(1);
