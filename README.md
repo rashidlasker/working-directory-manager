@@ -8,7 +8,6 @@ Working directory manager for switching between multiple projects
 
 Install `working-directory-manager` globally with `npm install working-directory-manager -g`, so you can use the command in any context.
 
-
 ## Syntax:
 
 Note: arguments in <> are required, arguments in [] are optional
@@ -37,16 +36,35 @@ View available terminals. If [terminal] is given, it will be saved as the termin
 
 Print current version
 
+## Development
+
+### Code Quality
+
+This project uses automated tooling to maintain code quality:
+
+- **ESLint** for code quality and consistency
+- **Prettier** for code formatting
+- **EditorConfig** for editor consistency
+
+### Scripts
+
+```bash
+npm run lint         # Check code for issues
+npm run lint:fix     # Automatically fix linting issues
+npm run format       # Format code with Prettier
+npm run format:check # Check code formatting
+```
 
 ## Todo
 
-* Change command prompt directory without opening a new window/have an option to do so
-* Style working directory list
-* Test/optimize on mac/linux
-* Add more terminal compatibility
-* Add backup/loading feature
-* Add colors
+- Change command prompt directory without opening a new window/have an option to do so
+- Style working directory list
+- Test/optimize on mac/linux
+- Add more terminal compatibility
+- Add backup/loading feature
+- Add colors
+- Add automated tests
 
 ## Contributing
 
-Send a pull request! Check out the list of todos
+We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on code quality, style, and the contribution process.

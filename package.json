@@ -7,12 +7,23 @@
     "wdm": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint *.js lib/**/*.js",
+    "lint:fix": "eslint *.js lib/**/*.js --fix",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,json,md}\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rashidlasker/working-directory-manager.git"
   },
+  "keywords": [
+    "cli",
+    "workspace",
+    "directory",
+    "manager",
+    "productivity"
+  ],
   "author": "Rashid Lasker",
   "license": "MIT",
   "bugs": {
@@ -20,6 +31,14 @@
   },
   "homepage": "https://github.com/rashidlasker/working-directory-manager#readme",
   "dependencies": {
-    "commander": "^2.13.0"
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
